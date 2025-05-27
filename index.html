@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Pickup</title>
+  <style>
+    body { font-family: sans-serif; background: #0d1117; color: white; text-align: center; margin-top: 100px; }
+    input { padding: 10px; font-size: 16px; margin-top: 10px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h1>Enter PIN to Confirm Pickup</h1>
+  <form id="pickup-form">
+    <input type="password" name="pin" placeholder="PIN Code" required><br>
+    <input type="hidden" name="record_id" id="record_id">
+    <button type="submit">Confirm</button>
+  </form>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get("record_id");
+    if (recordId) {
+      document.getElementById("record_id").value = recordId;
+    }
+
+    document.getElementById("pickup-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const payload = {
+        pin: formData.get("pin"),
+        record_id: formData.get("record_id")
+      };
+
+      const response = await fetch("https://hook.us2.make.com/YOUR_WEBHOOK_ID", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        alert("Pickup confirmed!");
+      } else {
+        alert("Error confirming pickup.");
+      }
+    });
+  </script>
+
+</body>
+</html>
