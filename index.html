@@ -41,11 +41,14 @@ const payload = {
         body: JSON.stringify(payload)
       });
 
-      if (response.ok) {
-        alert("Pickup confirmed!");
-      } else {
-        alert("Error confirming pickup.");
-      }
+     const result = await response.json();
+
+if (response.ok && result.status === "success") {
+  alert(result.message); // e.g., "Pickup confirmed"
+} else {
+  alert(result.message || "Something went wrong.");
+}
+
     });
   </script>
 
